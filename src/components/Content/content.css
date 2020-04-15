@@ -1,0 +1,22 @@
+.contentContainer{
+    margin: 30px;
+}
+
+.recordAddRow{
+    height: 50px;
+}
+
+.recordAddButtton{
+    float: right;
+}
+
+.contentTableBlock{
+    padding: 10px;
+    margin-top: 15px;
+    min-height: 100px;
+}
+
+.error{
+    color : red;
+    font-size: 12px;
+}

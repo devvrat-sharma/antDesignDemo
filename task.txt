@@ -1,0 +1,21 @@
+Evaluation Task:
+Create a React Project using react-bootstrap and use Ant Design of React components for all the Input fields and Grid.
+Input Form
+Create a UI to accept the below fields. All the fields are mandatory. App should validate all the fields and show the validation errors in case of any fields are missing or invalid. On Submit store the data into Local Storage. 
+Do not use firebase or any DB.
+ 
+Fields
+•         Ticket Number (Accept Alpha numeric and (-) special characters are allowed
+•         Number of Accounts  (Accept only numeric)
+•         Hours Saved : ( Accept only float)
+•         Execution Date : ( Accept only valid date. Date Format : mm/dd/yyyy)
+•         Executed By : (Accept only Alpha numeric and no special characters).
+ 
+Report 
+List above data into Grid. The Grid should have below functionality.
+•	Filter / Search any column data
+•	Sorting
+•	Paging
+•	Edit data – Pop up should appear to edit the existing data’s
+•	Delete Data.
+•	New Record button should appear Top of this page on click it should redirect to Input Form to feed the data.
