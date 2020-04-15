@@ -139,38 +139,38 @@ class Content extends Component {
     this.setState({ users });
   }
 
-  handleChange = (event) => {
-    // event.preventDefault();
-    const { name, value } = event.target;
-    let errors = this.state.errors;
+  // handleChange = (event) => {
+  //   // event.preventDefault();
+  //   const { name, value } = event.target;
+  //   let errors = this.state.errors;
 
-    switch (name) {
-      case "ticketNumber":
-        errors.ticketNumber = !value
-          ? "Please enter a value"
-          : alphaNumericRegex.test(value)
-          ? ""
-          : "Please enter an alphanumeric value with special characters!";
-        break;
-      case "noOfAccounts":
-        errors.noOfAccounts = !value ? "Please enter value!" : "";
-        break;
-      case "hoursSaved":
-        errors.hoursSaved = !value ? "Please enter value!" : "";
-        break;
-      case "executedBy":
-        errors.executedBy = !value
-          ? "Please enter a value"
-          : alphaNumericWithoutSpecialsRegex.test(value)
-          ? ""
-          : "Please enter an alphanumeric value without special characters!";
-        break;
-      default:
-        break;
-    }
+  //   switch (name) {
+  //     case "ticketNumber":
+  //       errors.ticketNumber = !value
+  //         ? "Please enter a value"
+  //         : alphaNumericRegex.test(value)
+  //         ? ""
+  //         : "Please enter an alphanumeric value with special characters!";
+  //       break;
+  //     case "noOfAccounts":
+  //       errors.noOfAccounts = !value ? "Please enter value!" : "";
+  //       break;
+  //     case "hoursSaved":
+  //       errors.hoursSaved = !value ? "Please enter value!" : "";
+  //       break;
+  //     case "executedBy":
+  //       errors.executedBy = !value
+  //         ? "Please enter a value"
+  //         : alphaNumericWithoutSpecialsRegex.test(value)
+  //         ? ""
+  //         : "Please enter an alphanumeric value without special characters!";
+  //       break;
+  //     default:
+  //       break;
+  //   }
 
-    this.setState({ errors, [name]: value });
-  };
+  //   this.setState({ errors, [name]: value });
+  // };
 
   showModal = () => {
     this.setState({
@@ -178,37 +178,37 @@ class Content extends Component {
     });
   };
 
-  handleSubmit = () => {
-    let data = localStorage.getItem("data");
-    let userData = {
-      id: 1,
-      ticketNumber: this.state.ticketNumber,
-      noOfAccounts: this.state.noOfAccounts,
-      hoursSaved: this.state.hoursSaved,
-      executionDate: this.state.executionDate,
-      executedBy: this.state.executedBy,
-    };
-    if (data) {
-      let localStorageData = JSON.parse(data);
-      userData.id = localStorageData.length + 1;
-      localStorageData.push(userData);
-      localStorage.setItem("data", JSON.stringify(localStorageData));
-      this.setState({ visible: false });
-    } else {
-      let data = [];
-      data.push(userData);
-      localStorage.setItem("data", JSON.stringify(data));
-      this.setState({ visible: false });
-    }
-    // this.setState({ loading: true });
-    // setTimeout(() => {
-    //   this.setState({ loading: false, visible: false });
-    // }, 3000);
-  };
-
-  // handleCancel = () => {
-  //   this.setState({ visible: false });
+  // handleSubmit = () => {
+  //   let data = localStorage.getItem("data");
+  //   let userData = {
+  //     id: 1,
+  //     ticketNumber: this.state.ticketNumber,
+  //     noOfAccounts: this.state.noOfAccounts,
+  //     hoursSaved: this.state.hoursSaved,
+  //     executionDate: this.state.executionDate,
+  //     executedBy: this.state.executedBy,
+  //   };
+  //   if (data) {
+  //     let localStorageData = JSON.parse(data);
+  //     userData.id = localStorageData.length + 1;
+  //     localStorageData.push(userData);
+  //     localStorage.setItem("data", JSON.stringify(localStorageData));
+  //     this.setState({ visible: false });
+  //   } else {
+  //     let data = [];
+  //     data.push(userData);
+  //     localStorage.setItem("data", JSON.stringify(data));
+  //     this.setState({ visible: false });
+  //   }
+  //   // this.setState({ loading: true });
+  //   // setTimeout(() => {
+  //   //   this.setState({ loading: false, visible: false });
+  //   // }, 3000);
   // };
+
+  handleCancel = () => {
+    this.setState({ visible: false });
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -286,17 +286,17 @@ class Content extends Component {
     this.setState({ searchText: "" });
   };
 
-  handleDateChange = (value, time) => {
-    let errors = this.state.errors;
-    console.log("asfsdv", time);
-    if (!time || time === "" || time === "undefined") {
-      errors.executionDate = "Please select a date!";
-      this.setState({ errors });
-    } else {
-      errors.executionDate = "";
-      this.setState({ executionDate: time });
-    }
-  };
+  // handleDateChange = (value, time) => {
+  //   let errors = this.state.errors;
+  //   console.log("asfsdv", time);
+  //   if (!time || time === "" || time === "undefined") {
+  //     errors.executionDate = "Please select a date!";
+  //     this.setState({ errors });
+  //   } else {
+  //     errors.executionDate = "";
+  //     this.setState({ executionDate: time });
+  //   }
+  // };
 
   render() {
     function onChange(pagination, filters, sorter, extra) {
@@ -348,7 +348,7 @@ class Content extends Component {
 
     return (
       <div className="contentContainer" id="a">
-        {this.state.visible ? <AddRecord visible={this.state.visible}/> : <React.Fragment></React.Fragment>}
+        {this.state.visible ? <AddRecord visible={this.state.visible} handleCancel={this.handleCancel}/> : <React.Fragment></React.Fragment>}
         {/* <Modal
           visible={visible}
           title="Title"

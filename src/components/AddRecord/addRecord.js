@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import {
-  Row,
-  Col,
   Button,
-  Table,
   Input,
   Modal,
   Form,
-  Select,
   DatePicker,
-  InputNumber,
-  Switch,
 } from "antd";
 
 import {
@@ -19,9 +12,9 @@ import {
   alphaNumericWithoutSpecialsRegex,
 } from "../../constants/constants";
 
-import { Typography } from "antd";
+import "./addRecord.css";
 
-class Content extends Component {
+class AddRecord extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,18 +40,92 @@ class Content extends Component {
   }
 
   componentDidMount() {
-
-    this.setState({ visible: this.props.visible })
-
+    this.setState({ visible: this.props.visible });
   }
 
   handleCancel = () => {
     this.setState({ visible: false });
+    this.props.handleCancel();
+  };
+
+  handleChange = (event) => {
+    // event.preventDefault();
+    const { name, value } = event.target;
+    let errors = this.state.errors;
+
+    switch (name) {
+      case "ticketNumber":
+        errors.ticketNumber = !value
+          ? "Please enter a value"
+          : alphaNumericRegex.test(value)
+          ? ""
+          : "Please enter an alphanumeric value with special characters!";
+        break;
+      case "noOfAccounts":
+        errors.noOfAccounts = !value ? "Please enter value!" : "";
+        break;
+      case "hoursSaved":
+        errors.hoursSaved = !value ? "Please enter value!" : "";
+        break;
+      case "executedBy":
+        errors.executedBy = !value
+          ? "Please enter a value"
+          : alphaNumericWithoutSpecialsRegex.test(value)
+          ? ""
+          : "Please enter an alphanumeric value without special characters!";
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ errors, [name]: value });
+  };
+
+  handleDateChange = (value, time) => {
+    let errors = this.state.errors;
+    console.log("asfsdv", time);
+    if (!time || time === "" || time === "undefined") {
+      errors.executionDate = "Please select a date!";
+      this.setState({ errors });
+    } else {
+      errors.executionDate = "";
+      this.setState({ executionDate: time });
+    }
+  };
+
+  handleSubmit = () => {
+    let data = localStorage.getItem("data");
+    let userData = {
+      id: 1,
+      ticketNumber: this.state.ticketNumber,
+      noOfAccounts: this.state.noOfAccounts,
+      hoursSaved: this.state.hoursSaved,
+      executionDate: this.state.executionDate,
+      executedBy: this.state.executedBy,
+    };
+    if (data) {
+      let localStorageData = JSON.parse(data);
+      userData.id = localStorageData.length + 1;
+      localStorageData.push(userData);
+      localStorage.setItem("data", JSON.stringify(localStorageData));
+      this.setState({ visible: false });
+      this.props.handleCancel();
+    } else {
+      let data = [];
+      data.push(userData);
+      localStorage.setItem("data", JSON.stringify(data));
+      this.setState({ visible: false });
+      this.props.handleCancel();
+    }
+    // this.setState({ loading: true });
+    // setTimeout(() => {
+    //   this.setState({ loading: false, visible: false });
+    // }, 3000);
   };
 
   render() {
     const { visible, loading, errors } = this.state;
- 
+
     return (
       <React.Fragment>
         <Modal
@@ -159,4 +226,4 @@ class Content extends Component {
   }
 }
 
-export default Content;
+export default AddRecord;
