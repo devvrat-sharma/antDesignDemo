@@ -1,33 +1,8 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import "./content.css";
-import {
-  Row,
-  Col,
-  Button,
-  Table,
-  Input,
-  Modal,
-  Form,
-  Select,
-  DatePicker,
-  InputNumber,
-  Switch,
-} from "antd";
+import { Button, Table, Input } from "antd";
 
-import AddRecord from "../AddRecord/addRecord";
-import Report from "../Report/report";
-import {
-  alphaNumericRegex,
-  alphaNumericWithoutSpecialsRegex,
-} from "../../constants/constants";
-
-import { Typography } from "antd";
-
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-
-const { Text } = Typography;
 
 const data = [
   {
@@ -104,15 +79,16 @@ const data = [
   },
 ];
 
-class Content extends Component {
+class Report extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: this.props.data,
       searchText: "",
       searchedColumn: "",
       loading: false,
       visible: false,
-      data: [],
+      users: [],
       confirmDirty: false,
       ticketNumber: null,
       noOfAccounts: null,
@@ -130,13 +106,7 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    let usersData = localStorage.getItem("data");
-    this.setState({ data: JSON.parse(usersData) });
-  }
-
-  setData = () => {
-    let usersData = localStorage.getItem("data");
-    this.setState({ data: JSON.parse(usersData), visible: false });
+    this.setState({ data: this.props.data });
   }
 
   // handleChange = (event) => {
@@ -206,9 +176,9 @@ class Content extends Component {
   //   // }, 3000);
   // };
 
-  // handleCancel = () => {
-  //   this.setState({ visible: false });
-  // };
+  handleCancel = () => {
+    this.setState({ visible: false });
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -305,30 +275,45 @@ class Content extends Component {
 
     const columns = [
       {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        width: "30%",
-        ...this.getColumnSearchProps("name"),
-        onFilter: (value, record) => record.name.indexOf(value) === 0,
-        sorter: (a, b) => a.name.length - b.name.length,
+        title: "Ticket No",
+        dataIndex: "ticketNumber",
+        key: "ticketNumber",
+        width: "20%",
+        ...this.getColumnSearchProps("ticketNumber"),
+        onFilter: (value, record) => record.ticketNumber.indexOf(value) === 0,
+        sorter: (a, b) => a.ticketNumber.length - b.ticketNumber.length,
         sortDirections: ["descend"],
       },
       {
-        title: "Age",
-        dataIndex: "age",
-        key: "age",
+        title: "Number of Accounts",
+        dataIndex: "noOfAccounts",
+        key: "noOfAccounts",
         width: "20%",
-        ...this.getColumnSearchProps("age"),
-        sorter: (a, b) => a.age - b.age,
+        ...this.getColumnSearchProps("noOfAccounts"),
+        sorter: (a, b) => a.noOfAccounts - b.noOfAccounts,
       },
       {
-        title: "Address",
-        dataIndex: "address",
-        key: "address",
-        ...this.getColumnSearchProps("address"),
-        onFilter: (value, record) => record.address.indexOf(value) === 0,
-        sorter: (a, b) => a.address.length - b.address.length,
+        title: "Hours Saved",
+        dataIndex: "hoursSaved",
+        key: "hoursSaved",
+        ...this.getColumnSearchProps("hoursSaved"),
+        // onFilter: (value, record) => record.hoursSaved.indexOf(value) === 0,
+        sorter: (a, b) => a.hoursSaved - b.hoursSaved,
+        sortDirections: ["descend", "ascend"],
+      },
+      {
+        title: "Execution Date",
+        dataIndex: "executionDate",
+        key: "executionDate",
+        ...this.getColumnSearchProps("executionDate"),
+      },
+      {
+        title: "Executed By",
+        dataIndex: "executedBy",
+        key: "executedBy",
+        ...this.getColumnSearchProps("executedBy"),
+        // onFilter: (value, record) => record.hoursSaved.indexOf(value) === 0,
+        sorter: (a, b) => a.executedBy.length - b.length,
         sortDirections: ["descend", "ascend"],
       },
       {
@@ -345,122 +330,12 @@ class Content extends Component {
     ];
 
     const { visible, loading, errors } = this.state;
+    const { data } = this.props;
+    console.log("this props", this.props.data);
+    console.log("----data", data);
 
-    return (
-      <div className="contentContainer" id="a">
-        {this.state.visible ? <AddRecord visible={this.state.visible} setData={this.setData}/> : <React.Fragment></React.Fragment>}
-        {/* <Modal
-          visible={visible}
-          title="Title"
-          onOk={this.handleSubmit}
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel}>
-              Return
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={loading}
-              onClick={this.handleSubmit}
-            >
-              Submit
-            </Button>,
-          ]}
-        >
-          <Form
-            labelCol={{
-              span: 6,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            layout="horizontal"
-            initialValues={{
-              size: "large",
-            }}
-            size="large"
-          >
-            <Form.Item label="Ticket Number*" rules={[{ required: true }]}>
-              <Input
-                name="ticketNumber"
-                value={this.state.ticketNumber}
-                onChange={this.handleChange}
-                required
-              />
-              {errors.ticketNumber.length > 0 && (
-                <span className="error">{errors.ticketNumber}</span>
-              )}
-            </Form.Item>
-
-            <Form.Item label="No of Accounts" rules={[{ required: true }]}>
-              <Input
-                type="number"
-                name="noOfAccounts"
-                value={this.state.noOfAccounts}
-                onChange={this.handleChange}
-                required
-              />
-              {errors.noOfAccounts.length > 0 && (
-                <span className="error">{errors.noOfAccounts}</span>
-              )}
-            </Form.Item>
-            <Form.Item label="Hours Saved" rules={[{ required: true }]}>
-              <Input
-                type="number"
-                step="0.01"
-                name="hoursSaved"
-                value={this.state.hoursSaved}
-                onChange={this.handleChange}
-                required
-              />
-              {errors.hoursSaved.length > 0 && (
-                <span className="error">{errors.hoursSaved}</span>
-              )}
-            </Form.Item>
-            <Form.Item label="Execution Date" rules={[{ required: true }]}>
-              <DatePicker
-                format="DD/MM/YYYY"
-                name="executionDate"
-                onChange={this.handleDateChange}
-                required
-              />
-              {errors.executionDate.length > 0 && (
-                <span className="error">{errors.executionDate}</span>
-              )}
-            </Form.Item>
-            <Form.Item label="Executed By" rules={[{ required: true }]}>
-              <Input
-                name="executedBy"
-                value={this.state.executedBy}
-                onChange={this.handleChange}
-                required
-              />
-              {errors.executedBy.length > 0 && (
-                <span className="error">{errors.executedBy}</span>
-              )}
-            </Form.Item>
-          </Form>
-        </Modal> */}
-        <Row className="recordAddRow">
-          <Col span={24}>
-            <Button
-              type="primary"
-              className="recordAddButtton"
-              icon={<PlusOutlined />}
-              size="large"
-              onClick={this.showModal}
-            >
-              Add Data
-            </Button>
-          </Col>
-        </Row>
-        <div className="contentTableBlock shadow">
-          <Report data={this.state.data}/>
-        </div>
-      </div>
-    );
+    return <Table columns={columns} dataSource={data} onChange={onChange} />;
   }
 }
 
-export default Content;
+export default Report;

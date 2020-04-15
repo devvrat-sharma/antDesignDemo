@@ -45,7 +45,7 @@ class AddRecord extends Component {
 
   handleCancel = () => {
     this.setState({ visible: false });
-    this.props.handleCancel();
+    this.props.setData();
   };
 
   handleChange = (event) => {
@@ -109,13 +109,13 @@ class AddRecord extends Component {
       localStorageData.push(userData);
       localStorage.setItem("data", JSON.stringify(localStorageData));
       this.setState({ visible: false });
-      this.props.handleCancel();
+      this.props.setData();
     } else {
       let data = [];
       data.push(userData);
       localStorage.setItem("data", JSON.stringify(data));
       this.setState({ visible: false });
-      this.props.handleCancel();
+      this.props.setData();
     }
     // this.setState({ loading: true });
     // setTimeout(() => {
