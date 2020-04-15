@@ -4,81 +4,6 @@ import { Button, Table, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-];
-
 class Report extends Component {
   constructor(props) {
     super(props);
@@ -86,22 +11,7 @@ class Report extends Component {
       data: this.props.data,
       searchText: "",
       searchedColumn: "",
-      loading: false,
       visible: false,
-      users: [],
-      confirmDirty: false,
-      ticketNumber: null,
-      noOfAccounts: null,
-      hoursSaved: null,
-      executionDate: null,
-      executedBy: null,
-      errors: {
-        ticketNumber: "",
-        noOfAccounts: "",
-        hoursSaved: "",
-        executionDate: "",
-        executedBy: "",
-      },
     };
   }
 
@@ -109,72 +19,11 @@ class Report extends Component {
     this.setState({ data: this.props.data });
   }
 
-  // handleChange = (event) => {
-  //   // event.preventDefault();
-  //   const { name, value } = event.target;
-  //   let errors = this.state.errors;
-
-  //   switch (name) {
-  //     case "ticketNumber":
-  //       errors.ticketNumber = !value
-  //         ? "Please enter a value"
-  //         : alphaNumericRegex.test(value)
-  //         ? ""
-  //         : "Please enter an alphanumeric value with special characters!";
-  //       break;
-  //     case "noOfAccounts":
-  //       errors.noOfAccounts = !value ? "Please enter value!" : "";
-  //       break;
-  //     case "hoursSaved":
-  //       errors.hoursSaved = !value ? "Please enter value!" : "";
-  //       break;
-  //     case "executedBy":
-  //       errors.executedBy = !value
-  //         ? "Please enter a value"
-  //         : alphaNumericWithoutSpecialsRegex.test(value)
-  //         ? ""
-  //         : "Please enter an alphanumeric value without special characters!";
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
-  //   this.setState({ errors, [name]: value });
-  // };
-
   showModal = () => {
     this.setState({
       visible: true,
     });
   };
-
-  // handleSubmit = () => {
-  //   let data = localStorage.getItem("data");
-  //   let userData = {
-  //     id: 1,
-  //     ticketNumber: this.state.ticketNumber,
-  //     noOfAccounts: this.state.noOfAccounts,
-  //     hoursSaved: this.state.hoursSaved,
-  //     executionDate: this.state.executionDate,
-  //     executedBy: this.state.executedBy,
-  //   };
-  //   if (data) {
-  //     let localStorageData = JSON.parse(data);
-  //     userData.id = localStorageData.length + 1;
-  //     localStorageData.push(userData);
-  //     localStorage.setItem("data", JSON.stringify(localStorageData));
-  //     this.setState({ visible: false });
-  //   } else {
-  //     let data = [];
-  //     data.push(userData);
-  //     localStorage.setItem("data", JSON.stringify(data));
-  //     this.setState({ visible: false });
-  //   }
-  //   // this.setState({ loading: true });
-  //   // setTimeout(() => {
-  //   //   this.setState({ loading: false, visible: false });
-  //   // }, 3000);
-  // };
 
   handleCancel = () => {
     this.setState({ visible: false });
@@ -256,18 +105,6 @@ class Report extends Component {
     this.setState({ searchText: "" });
   };
 
-  // handleDateChange = (value, time) => {
-  //   let errors = this.state.errors;
-  //   console.log("asfsdv", time);
-  //   if (!time || time === "" || time === "undefined") {
-  //     errors.executionDate = "Please select a date!";
-  //     this.setState({ errors });
-  //   } else {
-  //     errors.executionDate = "";
-  //     this.setState({ executionDate: time });
-  //   }
-  // };
-
   render() {
     function onChange(pagination, filters, sorter, extra) {
       console.log("params", pagination, filters, sorter, extra);
@@ -329,10 +166,7 @@ class Report extends Component {
       },
     ];
 
-    const { visible, loading, errors } = this.state;
     const { data } = this.props;
-    console.log("this props", this.props.data);
-    console.log("----data", data);
 
     return <Table columns={columns} dataSource={data} onChange={onChange} />;
   }

@@ -18,12 +18,8 @@ class AddRecord extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: "",
-      searchedColumn: "",
       loading: false,
       visible: this.props.visible,
-      users: [],
-      confirmDirty: false,
       ticketNumber: null,
       noOfAccounts: null,
       hoursSaved: null,
@@ -49,7 +45,7 @@ class AddRecord extends Component {
   };
 
   handleChange = (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     const { name, value } = event.target;
     let errors = this.state.errors;
 
