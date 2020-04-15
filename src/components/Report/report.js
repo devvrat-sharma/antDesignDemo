@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Button, Table, Input } from "antd";
+import { Button, Table, Input, Modal } from "antd";
 
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, ExclamationCircleOutlined  } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+
+const { confirm } = Modal;
 
 class Report extends Component {
   constructor(props) {
@@ -28,6 +30,19 @@ class Report extends Component {
   handleCancel = () => {
     this.setState({ visible: false });
   };
+
+showConfirm = (id) => {
+    const self = this;
+    confirm({
+      title: 'Do you want to delete this record?',
+      icon: <ExclamationCircleOutlined />,
+      content: '',
+      onOk() {
+        self.deleteRecord(id);
+      },
+      onCancel() {},
+    });
+  }
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -100,6 +115,15 @@ class Report extends Component {
     });
   };
 
+  deleteRecord = (id) => {
+    let data = JSON.parse(localStorage.getItem("data"));
+    var newData = data.filter(function (obj) {
+      return obj.id !== id;
+    });
+    localStorage.setItem("data", JSON.stringify(newData))
+    this.props.setData();
+  };
+
   handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
@@ -160,7 +184,7 @@ class Report extends Component {
         render: (record) => (
           <React.Fragment>
             <a onClick={() => alert(record.name)}>Edit</a>
-            <a style={{ marginLeft: 20 }}>Delete</a>
+            <a style={{ marginLeft: 20 }} onClick={() => this.showConfirm(record.id)}>Delete</a>
           </React.Fragment>
         ),
       },

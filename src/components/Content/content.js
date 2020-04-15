@@ -33,47 +33,8 @@ class Content extends Component {
     });
   };
 
+
   render() {
-    const columns = [
-      {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        width: "30%",
-        ...this.getColumnSearchProps("name"),
-        onFilter: (value, record) => record.name.indexOf(value) === 0,
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortDirections: ["descend"],
-      },
-      {
-        title: "Age",
-        dataIndex: "age",
-        key: "age",
-        width: "20%",
-        ...this.getColumnSearchProps("age"),
-        sorter: (a, b) => a.age - b.age,
-      },
-      {
-        title: "Address",
-        dataIndex: "address",
-        key: "address",
-        ...this.getColumnSearchProps("address"),
-        onFilter: (value, record) => record.address.indexOf(value) === 0,
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortDirections: ["descend", "ascend"],
-      },
-      {
-        title: "Action",
-        dataIndex: "",
-        key: "x",
-        render: (record) => (
-          <React.Fragment>
-            <a onClick={() => alert(record.name)}>Edit</a>
-            <a style={{ marginLeft: 20 }}>Delete</a>
-          </React.Fragment>
-        ),
-      },
-    ];
 
     return (
       <div className="contentContainer">
@@ -96,7 +57,7 @@ class Content extends Component {
           </Col>
         </Row>
         <div className="contentTableBlock shadow">
-          <Report data={this.state.data} />
+          <Report data={this.state.data} setData={this.setData}/>
         </div>
       </div>
     );
