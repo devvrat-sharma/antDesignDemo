@@ -13,7 +13,9 @@ class Content extends Component {
     this.state = {
       loading: false,
       visible: false,
-      data: [],
+      data: [], 
+      editMode: false,
+      editRecordData : null
     };
   }
 
@@ -27,19 +29,37 @@ class Content extends Component {
     this.setState({ data: JSON.parse(usersData), visible: false });
   };
 
+  setEditMode = () => {
+    this.setState({ editMode: true });
+  };
+
+  setEditModeCancel = () => {
+    this.setState({ editMode: false });
+  }
+
+  setEditData = (record) => {
+    // console.log("===record to edit", record);
+    this.setState({ editRecordData: record })
+  }
+
   showModal = () => {
     this.setState({
       visible: true,
     });
   };
 
-
   render() {
-
     return (
       <div className="contentContainer">
         {this.state.visible ? (
-          <AddRecord visible={this.state.visible} setData={this.setData} />
+          <AddRecord
+            visible={this.state.visible}
+            setData={this.setData}
+            editMode={this.state.editMode}
+            setEditMode={this.setEditMode} 
+            setEditModeCancel={this.setEditModeCancel}
+            editRecordData={this.state.editRecordData}
+          />
         ) : (
           <React.Fragment></React.Fragment>
         )}
@@ -57,7 +77,7 @@ class Content extends Component {
           </Col>
         </Row>
         <div className="contentTableBlock shadow">
-          <Report data={this.state.data} setData={this.setData}/>
+          <Report data={this.state.data} setData={this.setData} editMode={this.state.editMode} setEditMode={this.setEditMode} showModal={this.showModal} setEditModeCancel={this.setEditModeCancel} setEditData={this.setEditData}/>
         </div>
       </div>
     );

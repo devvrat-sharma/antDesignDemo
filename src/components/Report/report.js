@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Table, Input, Modal } from "antd";
 
-import { SearchOutlined, ExclamationCircleOutlined  } from "@ant-design/icons";
+import { SearchOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 const { confirm } = Modal;
@@ -31,18 +31,18 @@ class Report extends Component {
     this.setState({ visible: false });
   };
 
-showConfirm = (id) => {
+  showConfirm = (id) => {
     const self = this;
     confirm({
-      title: 'Do you want to delete this record?',
+      title: "Do you want to delete this record?",
       icon: <ExclamationCircleOutlined />,
-      content: '',
+      content: "",
       onOk() {
         self.deleteRecord(id);
       },
       onCancel() {},
     });
-  }
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -120,13 +120,19 @@ showConfirm = (id) => {
     var newData = data.filter(function (obj) {
       return obj.id !== id;
     });
-    localStorage.setItem("data", JSON.stringify(newData))
+    localStorage.setItem("data", JSON.stringify(newData));
     this.props.setData();
   };
 
   handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
+  };
+
+  openEditModal = (record) => {
+    this.props.setEditMode();
+    this.props.showModal();
+    this.props.setEditData(record)
   };
 
   render() {
@@ -183,8 +189,13 @@ showConfirm = (id) => {
         key: "x",
         render: (record) => (
           <React.Fragment>
-            <a onClick={() => alert(record.name)}>Edit</a>
-            <a style={{ marginLeft: 20 }} onClick={() => this.showConfirm(record.id)}>Delete</a>
+            <a onClick={() => this.openEditModal(record)}>Edit</a>
+            <a
+              style={{ marginLeft: 20 }}
+              onClick={() => this.showConfirm(record.id)}
+            >
+              Delete
+            </a>
           </React.Fragment>
         ),
       },

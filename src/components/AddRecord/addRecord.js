@@ -1,16 +1,12 @@
 import React, { Component } from "react";
-import {
-  Button,
-  Input,
-  Modal,
-  Form,
-  DatePicker,
-} from "antd";
+import { Button, Input, Modal, Form, DatePicker } from "antd";
 
 import {
   alphaNumericRegex,
   alphaNumericWithoutSpecialsRegex,
 } from "../../constants/constants";
+
+import * as moment from "moment";
 
 import "./addRecord.css";
 
@@ -20,11 +16,22 @@ class AddRecord extends Component {
     this.state = {
       loading: false,
       visible: this.props.visible,
-      ticketNumber: null,
-      noOfAccounts: null,
-      hoursSaved: null,
-      executionDate: null,
-      executedBy: null,
+      ticketNumber: this.props.editMode
+        ? this.props.editRecordData.ticketNumber
+        : null,
+      noOfAccounts: this.props.editMode
+        ? this.props.editRecordData.noOfAccounts
+        : null,
+      hoursSaved: this.props.editMode
+        ? this.props.editRecordData.hoursSaved
+        : null,
+      executionDate: this.props.editMode
+        ? this.props.editRecordData.executionDate
+        : null,
+      executedBy: this.props.editMode
+        ? this.props.editRecordData.executedBy
+        : null,
+      globalError: null,
       errors: {
         ticketNumber: "",
         noOfAccounts: "",
@@ -42,6 +49,7 @@ class AddRecord extends Component {
   handleCancel = () => {
     this.setState({ visible: false });
     this.props.setData();
+    this.props.setEditModeCancel();
   };
 
   handleChange = (event) => {
@@ -55,7 +63,7 @@ class AddRecord extends Component {
           ? "Please enter a value"
           : alphaNumericRegex.test(value)
           ? ""
-          : "Please enter an alphanumeric value with special characters!";
+          : "Please enter a value with one lower case letter, one digit, one special characeter from !@#$%_*$ with more character between 4-15";
         break;
       case "noOfAccounts":
         errors.noOfAccounts = !value ? "Please enter value!" : "";
@@ -89,30 +97,78 @@ class AddRecord extends Component {
     }
   };
 
+  validateAllFields = () => {
+    const {
+      ticketNumber,
+      noOfAccounts,
+      hoursSaved,
+      executionDate,
+      executedBy,
+    } = this.state;
+    if (
+      !ticketNumber ||
+      !noOfAccounts ||
+      !hoursSaved ||
+      !executionDate ||
+      !executedBy
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   handleSubmit = () => {
     let data = localStorage.getItem("data");
-    let userData = {
-      id: 1,
-      ticketNumber: this.state.ticketNumber,
-      noOfAccounts: this.state.noOfAccounts,
-      hoursSaved: this.state.hoursSaved,
-      executionDate: this.state.executionDate,
-      executedBy: this.state.executedBy,
-    };
-    if (data) {
-      let localStorageData = JSON.parse(data);
-      userData.id = localStorageData.length + 1;
-      localStorageData.push(userData);
-      localStorage.setItem("data", JSON.stringify(localStorageData));
-      this.setState({ visible: false });
-      this.props.setData();
+    let valid = this.validateAllFields();
+    if (valid) {
+      this.setState({ globalError: "Please enter all values!" });
     } else {
-      let data = [];
-      data.push(userData);
-      localStorage.setItem("data", JSON.stringify(data));
-      this.setState({ visible: false });
-      this.props.setData();
+      if (this.props.editMode) {
+        let dataArray = JSON.parse(data);
+        let objIndex = dataArray.findIndex(
+          (obj) => obj.id == this.props.editRecordData.id
+        );
+
+        dataArray[objIndex].id = this.props.editRecordData.id;
+        dataArray[objIndex].ticketNumber = this.state.ticketNumber;
+        dataArray[objIndex].noOfAccounts = this.state.noOfAccounts;
+        dataArray[objIndex].hoursSaved = this.state.hoursSaved;
+        dataArray[objIndex].executionDate = this.state.executionDate;
+        dataArray[objIndex].executedBy = this.state.executedBy;
+
+        localStorage.setItem("data", JSON.stringify(dataArray));
+        this.setState({ visible: false });
+        this.props.setData();
+        this.props.setEditModeCancel();
+      } else {
+        let userData = {
+          id: 1,
+          ticketNumber: this.state.ticketNumber,
+          noOfAccounts: this.state.noOfAccounts,
+          hoursSaved: this.state.hoursSaved,
+          executionDate: this.state.executionDate,
+          executedBy: this.state.executedBy,
+        };
+        if (data) {
+          let localStorageData = JSON.parse(data);
+          userData.id = localStorageData.length + 1;
+          localStorageData.push(userData);
+          localStorage.setItem("data", JSON.stringify(localStorageData));
+          this.setState({ visible: false });
+          this.props.setData();
+          this.props.setEditModeCancel();
+        } else {
+          let data = [];
+          data.push(userData);
+          localStorage.setItem("data", JSON.stringify(data));
+          this.setState({ visible: false });
+          this.props.setData();
+          this.props.setEditModeCancel();
+        }
+      }
     }
+
     // this.setState({ loading: true });
     // setTimeout(() => {
     //   this.setState({ loading: false, visible: false });
@@ -121,6 +177,8 @@ class AddRecord extends Component {
 
   render() {
     const { visible, loading, errors } = this.state;
+
+    console.log("this props editmode === ", this.props.editMode);
 
     return (
       <React.Fragment>
@@ -197,6 +255,11 @@ class AddRecord extends Component {
               <DatePicker
                 format="DD/MM/YYYY"
                 name="executionDate"
+                defaultValue={
+                  this.props.editMode
+                    ? moment(this.state.executionDate, "DD/MM?YYYY")
+                    : null
+                }
                 onChange={this.handleDateChange}
                 required
               />
@@ -213,6 +276,9 @@ class AddRecord extends Component {
               />
               {errors.executedBy.length > 0 && (
                 <span className="error">{errors.executedBy}</span>
+              )}
+              {this.state.globalError && this.state.globalError.length > 0 && (
+                <span className="error">{this.state.globalError}</span>
               )}
             </Form.Item>
           </Form>
