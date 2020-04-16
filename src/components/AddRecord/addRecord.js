@@ -87,7 +87,6 @@ class AddRecord extends Component {
 
   handleDateChange = (value, time) => {
     let errors = this.state.errors;
-    console.log("asfsdv", time);
     if (!time || time === "" || time === "undefined") {
       errors.executionDate = "Please select a date!";
       this.setState({ errors });
@@ -168,17 +167,10 @@ class AddRecord extends Component {
         }
       }
     }
-
-    // this.setState({ loading: true });
-    // setTimeout(() => {
-    //   this.setState({ loading: false, visible: false });
-    // }, 3000);
   };
 
   render() {
     const { visible, loading, errors } = this.state;
-
-    console.log("this props editmode === ", this.props.editMode);
 
     return (
       <React.Fragment>

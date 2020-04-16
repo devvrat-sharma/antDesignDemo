@@ -38,7 +38,6 @@ class Content extends Component {
   }
 
   setEditData = (record) => {
-    // console.log("===record to edit", record);
     this.setState({ editRecordData: record })
   }
 
